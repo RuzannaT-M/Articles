@@ -59,4 +59,11 @@ struct UIHelper {
         }
         return result
     }
+    
+    static func showAlert(with message: String, from vc: UIViewController) {
+        let alert = UIAlertController.init(title: nil, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Ok", style: .default)
+        alert.addAction(okAction)
+        vc.present(alert, animated: true, completion: nil)
+    }
 }

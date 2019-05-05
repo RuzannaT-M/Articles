@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 class ArticlesListViewController: UIViewController {
     
@@ -15,7 +16,7 @@ class ArticlesListViewController: UIViewController {
     private let loader = UIActivityIndicatorView(style: .gray)
     private let refreshControl = UIRefreshControl()
 
-    var articles = [Article]()
+    var articles: Results<Article>?
     var currentPage: Int = 1
     let cellHeight:CGFloat = 200
     
@@ -33,12 +34,18 @@ class ArticlesListViewController: UIViewController {
     private func fetchNewArticles() {
         loader.startAnimating()
         articlesTableView.tableFooterView?.isHidden = false
-        ArticlesManager.shared.getArticles(page: currentPage, successBlock: {_ in
-            if self.currentPage == 1 {
-                self.articles.removeAll()
+        ArticlesManager.shared.getArticles(page: currentPage, successBlock: { result, error  in
+            if let error = error {
+                UIHelper.showAlert(with: error.localizedDescription, from: self)
+                return
+            }
+            if self.articles == nil {
+                self.articles = result
             }
             self.currentPage += 1
             self.updateUI()
+        }, failureBlock: { error in
+            UIHelper.showAlert(with: error, from: self)
         })
     }
     
@@ -48,7 +55,6 @@ class ArticlesListViewController: UIViewController {
     }
     
     private func updateUI() {
-        self.articles = ArticlesManager.shared.articles
         self.stopAnimations()
         self.articlesTableView.reloadData()
     }
@@ -63,30 +69,34 @@ class ArticlesListViewController: UIViewController {
 extension ArticlesListViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return articles.count
+        return articles?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ArticleTableViewCell", for: indexPath)
             as! ArticleTableViewCell
-        cell.updateCell(article: articles[indexPath.row])
+        cell.updateCell(article: articles?[indexPath.row])
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return cellHeight
     }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == articles.count - 3 {
-            fetchNewArticles()
+        
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let article = articles?[indexPath.row] {
+            let vc:ArticleViewController = UIStoryboard.instantiateController()
+            vc.article = article
+            self.navigationController?.pushViewController(vc, animated: true)
         }
     }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let article = articles[indexPath.row]
-        let vc:ArticleViewController = UIStoryboard.instantiateController()
-        vc.article = article
-        self.navigationController?.pushViewController(vc, animated: true)
+}
+
+extension ArticlesListViewController: UITableViewDataSourcePrefetching {
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        guard let last = indexPaths.last else { return }
+        if let count = articles?.count, last.row == count - 3 {
+            fetchNewArticles()
+        }
     }
 }

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import UIKit
+import RealmSwift
 
 class ArticleContainer: Decodable {
 	var results = [Article]()
@@ -19,19 +19,29 @@ class ArticleContainer: Decodable {
 	}
 }
 
-class Article: Decodable {
+class Article: Object, Decodable {
     
-    var id: String?
-    var title: String?
-    var content: String?
-    var thumbnail: String?
-    var category: String?
-    var date: Date?
-    var tags = [String]()
+    @objc dynamic var id: String?
+    @objc dynamic var title: String?
+    @objc dynamic var content: String?
+    @objc dynamic var thumbnail: String?
+    @objc dynamic var category: String?
+    @objc dynamic var date: Date?
     
-    //MARK: - Initialization
-    init() {}
+    lazy var tags = {
+        return Helper.getWordsFromText(title)
+    }()
     
+    //MARK: - Configurations For DB
+    override static func primaryKey() -> String? {
+        return "id"
+    }
+    
+    override static func ignoredProperties() -> [String] {
+        return ["tags"]
+    }
+    
+    //MARK: - Initialization		    
     convenience required init(from decoder: Decoder) throws {
         self.init()
         let values = try decoder.container(keyedBy: Article.CodingKeys.self)
@@ -46,7 +56,6 @@ class Article: Decodable {
             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
             date = dateFormatter.date(from: dateStr)
         }
-        tags = Helper.getWordsFromText(title)
     }
 }
 

@@ -24,6 +24,7 @@
 		0792DFD122587AC900361195 /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0792DFD022587AC900361195 /* UIHelper.swift */; };
 		079525A82258CF5600262678 /* UIStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079525A72258CF5600262678 /* UIStoryboard.swift */; };
 		58F32F30480D3D8E8B0CB9A5 /* Pods_Articles.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FB8B0B24D8101BF6A123858 /* Pods_Articles.framework */; };
+		E64BA0AC227E302100C00518 /* DataBaseAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BA0AB227E302100C00518 /* DataBaseAdapter.swift */; };
 		F2A05DAA225B42FA00EA8B8F /* ArticlesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2A05DA4225B42FA00EA8B8F /* ArticlesManager.swift */; };
 		F2A05DAB225B42FA00EA8B8F /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2A05DA6225B42FA00EA8B8F /* Helper.swift */; };
 		F2A05DAC225B42FA00EA8B8F /* APIAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2A05DA8225B42FA00EA8B8F /* APIAdapter.swift */; };
@@ -54,6 +55,7 @@
 		9FB8B0B24D8101BF6A123858 /* Pods_Articles.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Articles.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4964923EEBD4B8E786229C3 /* Pods-Articles.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Articles.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Articles/Pods-Articles.debug.xcconfig"; sourceTree = "<group>"; };
 		CA853191001EDE2753DE4497 /* Pods-Articles.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Articles.release.xcconfig"; path = "Target Support Files/Pods-Articles/Pods-Articles.release.xcconfig"; sourceTree = "<group>"; };
+		E64BA0AB227E302100C00518 /* DataBaseAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBaseAdapter.swift; sourceTree = "<group>"; };
 		F2A05DA4225B42FA00EA8B8F /* ArticlesManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArticlesManager.swift; sourceTree = "<group>"; };
 		F2A05DA6225B42FA00EA8B8F /* Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		F2A05DA8225B42FA00EA8B8F /* APIAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIAdapter.swift; sourceTree = "<group>"; };
@@ -203,6 +205,7 @@
 		F2A05DA7225B42FA00EA8B8F /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				E64BA0AB227E302100C00518 /* DataBaseAdapter.swift */,
 				F2A05DA8225B42FA00EA8B8F /* APIAdapter.swift */,
 				F2A05DA9225B42FA00EA8B8F /* Article.swift */,
 			);
@@ -302,18 +305,22 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Articles/Pods-Articles-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Articles/Pods-Articles-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
+				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Articles/Pods-Articles-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Articles/Pods-Articles-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -326,6 +333,7 @@
 				078AC1202259C7D800251B0D /* CategoryCollectionViewCell.swift in Sources */,
 				F2A05DAC225B42FA00EA8B8F /* APIAdapter.swift in Sources */,
 				F2A05DAD225B42FA00EA8B8F /* Article.swift in Sources */,
+				E64BA0AC227E302100C00518 /* DataBaseAdapter.swift in Sources */,
 				075C6B34224F996E0017E79D /* ArticleTableViewCell.swift in Sources */,
 				F2A05DAA225B42FA00EA8B8F /* ArticlesManager.swift in Sources */,
 				075C6B18224F92C90017E79D /* AppDelegate.swift in Sources */,

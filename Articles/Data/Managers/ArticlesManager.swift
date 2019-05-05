@@ -11,24 +11,34 @@ import Foundation
 class ArticlesManager {
     
     static let shared = ArticlesManager()
-    var articles = [Article]()
+    private let dbAdapter = DataBaseAdapter()
+    private var isInFetchingProcess = false
 
     //MARK: Public methods
-    func getArticles(page:Int, successBlock: @escaping SuccesBlock, failureBlock: FailureBlock? = nil) {
+    func getArticles(page:Int, successBlock: @escaping DBSuccesBlock, failureBlock: FailureBlock? = nil) {
+        if isInFetchingProcess {
+            return
+        }
+        dbAdapter.getObjects { result, error  in
+            successBlock(result, error)
+        }
+        isInFetchingProcess = true
         let params: [String: Any] = [
             "show-fields" : "bodyText,thumbnail,headline",
             "page-size" : 20,
             "page" : page
         ]
         APIAdapter.request(method: .get, parameters: params, successBlock: { (data) in
-            if page == 1 {
-                self.articles.removeAll()
-            }
+            var articles = [Article]()
             if let result = try? JSONDecoder().decode(ArticleContainer.self, from: data) {
-                self.articles.append(contentsOf: result.results)
+                articles.append(contentsOf: result.results)
             }
-            successBlock(data)
-        }, failureBlock: failureBlock)
+            self.dbAdapter.saveObjects(objects: articles)
+            self.isInFetchingProcess = false
+        }, failureBlock: { error in
+            self.isInFetchingProcess = false
+            failureBlock?(error)
+        })
     }
     
     //MARK: - Initialization

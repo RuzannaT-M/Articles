@@ -14,6 +14,7 @@ typealias FailureBlock = (_ errorMessage: String) -> Void
 
 class APIAdapter {
     
+    static let network = NetworkReachabilityManager()
     static let baseURL = "https://content.guardianapis.com/search"
     static let apiKey  = "21b5f554-603d-490a-96bd-00531b3158f1"
     
@@ -22,6 +23,11 @@ class APIAdapter {
                                 successBlock: @escaping SuccesBlock,
                                 failureBlock: FailureBlock? = nil)
     {
+        guard NetworkReachabilityManager()!.isReachable else {
+            failureBlock?("No Connection")
+            return
+        }
+        
         let manager = Alamofire.SessionManager.default
         var params = parameters
         params["api-key"] = apiKey
@@ -35,9 +41,7 @@ class APIAdapter {
 						case .success(let data):
 							successBlock(data)
 						case .failure(let error):
-							if let blk = failureBlock {
-								blk(error.localizedDescription)
-							}
+                            failureBlock?(error.localizedDescription)
 							print("\nError:   code === \(error._code) " + "\(error.localizedDescription)\n")
 						}
 					})

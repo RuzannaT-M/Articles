@@ -8,5 +8,6 @@ target 'Articles' do
   # Pods for Articles
 pod 'Alamofire'
 pod 'Kingfisher'
+pod 'RealmSwift'
 
 end

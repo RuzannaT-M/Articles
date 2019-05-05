@@ -21,11 +21,11 @@ class ArticleTableViewCell: UITableViewCell {
     }
     
     //MARK: - Public methods
-    func updateCell(article: Article) {
-        titleLabel.text = article.title
+    func updateCell(article: Article?) {
+        titleLabel.text = article?.title ?? ""
         UIHelper.roundCorners(view: articleImageView, radius: 5)
         UIHelper.roundCorners(view: titleLabel, radius: 5)
-        if let imageUrl = article.thumbnail {
+        if let imageUrl = article?.thumbnail {
             let url = URL(string: imageUrl)
             articleImageView.kf.setImage(with: url)
         } else {
